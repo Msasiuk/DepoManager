@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #82C6D8;
+}
+
+section {
+  margin-bottom: 40px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #fff;
+}
+
+#producto-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input, form button {
+  flex: 1 1 calc(33.333% - 10px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+form button {
+  background-color: #82C6D8;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #82a9d8;
+}
+
+#tipo-producto-list, #producto-list {
+  margin-top: 20px;
+}
+
+.list-item {
+  background-color: #f1f1f1;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.list-item button:hover {
+  background-color: #c82333;
+}

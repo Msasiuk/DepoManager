@@ -30,7 +30,7 @@ public class DetalleMovimiento {
     @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "id_movimiento", nullable = false)
-    private IMovimientoStock movimientoStock;
+    private MovimientoStock movimientoStock;
 
     @Getter @Setter
     @ManyToOne
