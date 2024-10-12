@@ -51,10 +51,19 @@ public class Producto {
     private int cantidad;
 
     @Getter @Setter
-    @Column(name = "stock_maximo", nullable = false)
+    @Column(name = "stock_maximo")
     private int stockMaximo;
 
     @Getter @Setter
-    @Column(name = "stock_minimo", nullable = false)
+    @Column(name = "stock_minimo")
     private int stockMinimo;
+
+	public Producto(String codigo, String descripcion, TipoProducto tipoProducto, int cantidad) {
+		super();
+		this.codigo = codigo;
+		this.descripcion = descripcion;
+		this.tipoProducto = tipoProducto;
+		this.cantidad = cantidad;
+	}
+    
 }

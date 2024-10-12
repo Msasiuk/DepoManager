@@ -19,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "movimiento_stock")
-public class IMovimientoStock {
+public class MovimientoStock {
 
     @Getter
     @Id
@@ -47,6 +47,11 @@ public class IMovimientoStock {
     @ManyToOne
     @JoinColumn(name = "id_deposito", nullable = false)
     private Deposito deposito;
+    
+    @Getter @Setter
+    @ManyToOne
+    @JoinColumn(name = "id_proveedor", nullable = false)
+    private Proveedor proveedor;
 
     @Getter @Setter
     @OneToMany(mappedBy = "movimientoStock")
