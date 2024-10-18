@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -16,15 +16,19 @@
 	<form id="producto-form">
 		<input type="text" id="producto-codigo" placeholder="Código" required>
 	    <input type="text" id="producto-descripcion" placeholder="Descripción" required>
-	    <input type="date" id="producto-fecha-inicio">
-	    <input type="date" id="producto-fecha-fin">
+		
+		<!-- Campo de fecha de inicio, deshabilitado 
+	    <input type="date" id="producto-fecha-inicio" disabled> -->
+		<label for="producto-fecha-fin">Fecha Finalización 	    
+			<input type="date" id="producto-fecha-fin" value="9999-12-31">
+		</label>
 		<select id="producto-tipo" required>
-		  <option value="" disabled selected>Seleccione un tipo de producto</option>
+		  <option value="" disabled selected>Tipo de producto</option>
 		</select>
 	    <input type="number" id="producto-cantidad" placeholder="Cantidad">
 	    <input type="number" id="producto-stock-max" placeholder="Stock Máximo">
 	    <input type="number" id="producto-stock-min" placeholder="Stock Mínimo">
-	    <button type="submit">Ingresar Producto</button>
+	    <button type="submit">Crear Producto</button>
 	</form>
 
 	<!-- Lista de productos -->
@@ -33,4 +37,4 @@
 
 	<script src="js/productos.js"></script>
 </body>
-</html>
+</html> 

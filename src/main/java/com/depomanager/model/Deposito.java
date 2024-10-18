@@ -1,7 +1,8 @@
 package com.depomanager.model;
 
-import java.util.Date;
 import java.util.List;
+
+import com.depomanager.controller.HasCodigo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "deposito")
-public class Deposito {
+public class Deposito extends Fechas implements HasCodigo {
 
     @Getter
     @Id
@@ -32,14 +33,6 @@ public class Deposito {
     @Getter @Setter
     @Column(name = "descripcion", length = 255, nullable = false)
     private String descripcion;
-
-    @Getter @Setter
-    @Column(name = "fecha_inicio")
-    private Date fechaInicio;
-
-    @Getter @Setter
-    @Column(name = "fecha_fin")
-    private Date fechaFin;
 
     @Getter @Setter
     @OneToMany(mappedBy = "deposito")
