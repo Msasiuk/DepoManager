@@ -1,7 +1,5 @@
 package com.depomanager.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario extends Fechas{
 
     @Getter
     @Id
@@ -31,11 +29,4 @@ public class Usuario {
     @Column(name = "contrasenia", length = 255, nullable = false)
     private String contrasenia;
 
-    @Getter @Setter
-    @Column(name = "fecha_inicio")
-    private Date fechaInicio;
-
-    @Getter @Setter
-    @Column(name = "fecha_fin")
-    private Date fechaFin;
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DepoManager - Modificar Proveedor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Modificar Proveedor</h1>
+
+  <section id="modificar-proveedor-section">
+    <form id="modificar-proveedor-form">
+      <input type="hidden" id="proveedor-id">
+	  
+      <input type="text" id="proveedor-cuit-cuil" placeholder="CUIT/CUIL" required>
+      <input type="text" id="proveedor-nombre" placeholder="Nombre" required>
+      <input type="text" id="proveedor-razon-social" placeholder="Razón Social">
+      
+	  <label for="proveedor-fecha-inicio">Fecha Inicio</label>
+      <input type="date" id="proveedor-fecha-inicio" disabled>
+      
+	  <label for="proveedor-fecha-fin">Fecha Finalización</label>
+      <input type="date" id="proveedor-fecha-fin">
+	  
+      <button type="submit">Guardar Cambios</button>
+      <button type="button" onclick="volver()">Volver</button>
+    </form>
+  </section>
+
+  <script src="js/modificar-proveedor.js"></script>
+</body>
+</html>

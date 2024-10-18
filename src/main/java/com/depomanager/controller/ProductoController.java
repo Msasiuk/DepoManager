@@ -1,7 +1,5 @@
 package com.depomanager.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.depomanager.model.Producto;
 import com.depomanager.repository.IProductoRepository;
+import com.depomanager.service.FechaService;
 
 @RestController
 @RequestMapping("/api/productos")
@@ -19,7 +18,9 @@ public class ProductoController extends BaseController<Producto, Long> {
     @Autowired
     private IProductoRepository productoRepository;
 
- 
+    @Autowired
+    private FechaService fechaService;
+
     @Override
     @PostMapping
     public ResponseEntity<String> create(@RequestBody Producto producto) {
@@ -27,15 +28,8 @@ public class ProductoController extends BaseController<Producto, Long> {
             return ResponseEntity.badRequest().body("El código del producto ya existe.");
         }
 
-        // Establecer la fecha de inicio como la fecha actual si no se proporciona
-        if (producto.getFechaInicio() == null) {
-            producto.setFechaInicio(new Date());
-        }
-
-        // Establecer fecha fin a 31/12/9999 si no se proporciona
-        if (producto.getFechaFin() == null) {
-            producto.setFechaFin(new Date(Long.MAX_VALUE));
-        }
+    	 // Usar el FechaService para establecer fechas por defecto
+        fechaService.establecerFechasPorDefecto(producto);
 
         // Valores por defecto
         if (producto.getCantidad() == 0) producto.setCantidad(0);
