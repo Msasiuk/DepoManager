@@ -11,24 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Redirigir a la página principal al hacer clic en "Volver"
 function volver() {
   window.location.href = 'productos.html';
 }
 
 // Cargar datos del producto en el formulario
 async function cargarProducto(id) {
+	
   try {
     const response = await fetch(`${API_BASE_URL}/productos/${id}`);
-    if (!response.ok) throw new Error('Producto no encontrado');
     const producto = await response.json();
 
+    document.getElementById('producto-id').value = producto.id;
     document.getElementById('producto-codigo').value = producto.codigo;
     document.getElementById('producto-descripcion').value = producto.descripcion;
     document.getElementById('producto-fecha-inicio').value = formatFecha(producto.fechaInicio);
     document.getElementById('producto-fecha-fin').value = formatFecha(producto.fechaFin);
-    document.getElementById('producto-tiene-vencimiento').value = producto.tieneVencimiento.toString();
     document.getElementById('producto-tipo').value = producto.tipoProducto.id;
-    document.getElementById('producto-punto-reposicion').value = producto.puntoReposicion;
+    document.getElementById('producto-cantidad').value = producto.cantidad;
     document.getElementById('producto-stock-max').value = producto.stockMaximo;
     document.getElementById('producto-stock-min').value = producto.stockMinimo;
   } catch (error) {
@@ -41,27 +42,46 @@ function formatFecha(fecha) {
   return new Date(fecha).toISOString().split('T')[0];
 }
 
+// Obtener y llenar los tipos de producto en el <select>
+async function fetchTiposProducto() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/tipo-productos`);
+    const tipos = await response.json();
+    renderTiposProducto(tipos);
+  } catch (error) {
+    console.error('Error al cargar tipos de productos:', error);
+  }
+}
+
+function renderTiposProducto(tipos) {
+  const tipoSelect = document.getElementById('producto-tipo');
+  tipoSelect.innerHTML = '';
+
+  tipos.forEach(tipo => {
+    const option = document.createElement('option');
+    option.value = tipo.id;
+    option.textContent = tipo.descripcion;
+    tipoSelect.appendChild(option);
+  });
+}
+
 // Guardar los cambios en el producto
 async function guardarCambios() {
 	// Validación de valores positivos
-		const stockMaximo = parseInt(document.getElementById('producto-stock-max').value);
-		const stockMinimo = parseInt(document.getElementById('producto-stock-min').value);
-		const puntoReposicion = parseInt(document.getElementById('punto-reposicion').value);
+		    const stockMaximo = parseInt(document.getElementById('producto-stock-max').value) || 0;
+		    const stockMinimo = parseInt(document.getElementById('producto-stock-min').value) || 0;
 
-		if (stockMaximo <= 0 || stockMinimo <= 0 || puntoReposicion <= 0) {
-		      alert('Los stocks y el punto de reposición deben ser valores positivos.');
+		    if (stockMaximo < 0 || stockMinimo < 0) {
+		      alert('Los stocks deben ser valores positivos.');
 		      return;
-		}
-		
+		    }
   const producto = {
-    id: productoId,
+    id: document.getElementById('producto-id').value,
     codigo: document.getElementById('producto-codigo').value,
     descripcion: document.getElementById('producto-descripcion').value,
     fechaInicio: document.getElementById('producto-fecha-inicio').value,
     fechaFin: document.getElementById('producto-fecha-fin').value,
-    tieneVencimiento: document.getElementById('producto-tiene-vencimiento').value === 'true',
-    tipoProducto: { id: parseInt(document.getElementById('producto-tipo').value) },
-    puntoReposicion: parseInt(document.getElementById('producto-punto-reposicion').value) || 0,
+    tipoProducto: { id: document.getElementById('producto-tipo').value },
     stockMaximo: parseInt(document.getElementById('producto-stock-max').value) || 0,
     stockMinimo: parseInt(document.getElementById('producto-stock-min').value) || 0,
   };
@@ -75,7 +95,7 @@ async function guardarCambios() {
 
     if (response.ok) {
       alert('Producto modificado exitosamente.');
-      window.location.href = 'productos.html';
+      window.location.href = 'productos.html'; // Redirigir a la lista de productos
     } else {
       const errorText = await response.text();
       alert(`Error: ${errorText}`);
@@ -84,36 +104,4 @@ async function guardarCambios() {
     console.error('Error al guardar los cambios:', error);
     alert('Error al guardar los cambios.');
   }
-}
-
-// Obtener tipos de producto y llenar el <select>
-async function fetchTiposProducto() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/tipos-producto`);
-    if (!response.ok) throw new Error(`Error: ${response.status}`);
-    const tipos = await response.json();
-    renderTiposProducto(Array.isArray(tipos) ? tipos : []);
-  } catch (error) {
-    console.error('Error al cargar tipos de productos:', error);
-  }
-}
-
-// Rellenar el <select> con los tipos de productos
-function renderTiposProducto(tipos) {
-  const tipoSelect = document.getElementById('producto-tipo');
-  tipoSelect.innerHTML = ''; // Limpiar el select
-
-  const defaultOption = document.createElement('option');
-  defaultOption.value = '';
-  defaultOption.textContent = 'Seleccione un tipo de producto';
-  defaultOption.disabled = true;
-  defaultOption.selected = true;
-  tipoSelect.appendChild(defaultOption);
-
-  tipos.forEach((tipo) => {
-    const option = document.createElement('option');
-    option.value = tipo.id;
-    option.textContent = tipo.descripcion;
-    tipoSelect.appendChild(option);
-  });
 }

@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -17,20 +17,28 @@
 		<input type="text" id="producto-codigo" placeholder="Código" required>
 	    <input type="text" id="producto-descripcion" placeholder="Descripción" required>
 		
-		<!-- Campo de fecha de inicio, deshabilitado 
-	    <input type="date" id="producto-fecha-inicio" disabled> -->
+		<!-- Consulta si el producto tiene vencimiento -->
+		<label for="producto-tiene-vencimiento">¿Tiene vencimiento?</label>
+		    <select id="producto-tiene-vencimiento" required>
+		      <option value="false" selected>No</option>
+		      <option value="true">Sí</option>
+		</select>
+		
 		<label for="producto-fecha-fin">Fecha Finalización 	    
 			<input type="date" id="producto-fecha-fin" value="9999-12-31">
 		</label>
+		
 		<select id="producto-tipo" required>
-		  <option value="" disabled selected>Tipo de producto</option>
+		       <option value="" disabled selected>Tipo de producto</option>
 		</select>
-	    <input type="number" id="producto-cantidad" placeholder="Cantidad">
+			 
+		<input type="number" id="punto-reposicion" placeholder="Punto de Reposicón">
 	    <input type="number" id="producto-stock-max" placeholder="Stock Máximo">
 	    <input type="number" id="producto-stock-min" placeholder="Stock Mínimo">
+		
 	    <button type="submit">Crear Producto</button>
 	</form>
-
+	
 	<!-- Lista de productos -->
 	<div id="producto-list"></div>
 	</section>

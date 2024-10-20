@@ -1,12 +1,16 @@
 package com.depomanager.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.depomanager.model.Deposito;
+
 import com.depomanager.repository.IDepositoRepository;
 import com.depomanager.service.FechaService;
 
@@ -22,15 +26,19 @@ public class DepositoController extends BaseController<Deposito, Long> {
 
     @Override
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Deposito deposito) {
+    public ResponseEntity<Map<String, String>> create(@RequestBody Deposito deposito) {
+        // Validar si el de ya existe
         if (depositoRepository.existsByCodigo(deposito.getCodigo())) {
-            return ResponseEntity.badRequest().body("El código del depósito ya existe.");
+            // Devolver 409 Conflict si el código ya existe
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "El código del deposito ya existe."));
         }
 
-        // Usar el FechaService para establecer fechas por defecto
+        // Usar FechaService para establecer fechas por defecto
         fechaService.establecerFechasPorDefecto(deposito);
 
         depositoRepository.save(deposito);
-        return ResponseEntity.ok("Depósito creado exitosamente.");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("message", "Deposito creado exitosamente."));
     }
 }

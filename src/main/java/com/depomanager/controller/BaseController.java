@@ -1,9 +1,12 @@
 package com.depomanager.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,34 +15,28 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-public abstract class BaseController<T extends HasCodigo, ID>  {
+public abstract class BaseController<T, ID> {
 
     @Autowired
     private JpaRepository<T, ID> repository;
 
-    //Método para crear entidades
+    // Crear entidad (sin validación de código)
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody T entity) {
-        // Validar que el codigo o cuilCuit no sea nulo o vacío
-        if (entity.getCodigo() == null || entity.getCodigo().trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("El código no puede estar vacío.");
-        }
+    public ResponseEntity<Map<String, String>> create(@RequestBody T entity) {
+        Map<String, String> response = new HashMap<>();
 
-        // Validar si el código ya existe
-        if (repository.findAll().stream().anyMatch(e -> e.getCodigo().equals(entity.getCodigo()))) {
-            return ResponseEntity.badRequest().body("El código ya existe.");
-        }
-
+        // Guardar la entidad sin validar el código
         repository.save(entity);
-        return ResponseEntity.ok("Entidad creada exitosamente.");
+        response.put("message", "Entidad creada exitosamente.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    
+
     // Obtener todos los elementos
     @GetMapping
     public List<T> getAll() {
         return repository.findAll();
     }
-    
+
     // Obtener un elemento por ID
     @GetMapping("/{id}")
     public ResponseEntity<T> getById(@PathVariable ID id) {
@@ -47,31 +44,36 @@ public abstract class BaseController<T extends HasCodigo, ID>  {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
-    // Actualizar un elemento por ID
+
+    // Actualizar entidad (sin validación de código)
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable ID id, @RequestBody T entity) {
-        // Validar si el código está en uso por otra entidad
-        if (repository.findAll().stream()
-                .anyMatch(e -> e.getCodigo().equals(entity.getCodigo()) && !e.getId().equals(id))) {
-            return ResponseEntity.badRequest().body("El código ya está en uso por otro registro.");
-        }
+    public ResponseEntity<Map<String, String>> update(@PathVariable ID id, @RequestBody T entity) {
+        Map<String, String> response = new HashMap<>();
 
+        // Verificar si existe la entidad por ID antes de actualizar
         if (!repository.existsById(id)) {
-            return ResponseEntity.notFound().build();
+            response.put("message", "Entidad no encontrada.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
+        // Guardar la entidad sin validar el código
         repository.save(entity);
-        return ResponseEntity.ok("Entidad modificada exitosamente.");
+        response.put("message", "Entidad modificada exitosamente.");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // Eliminar un elemento por ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable ID id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable ID id) {
+        Map<String, String> response = new HashMap<>();
+
         if (repository.existsById(id)) {
             repository.deleteById(id);
-            return ResponseEntity.ok("Elemento eliminado exitosamente.");
+            response.put("message", "Elemento eliminado exitosamente.");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return ResponseEntity.notFound().build();
+
+        response.put("message", "Elemento no encontrado.");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }

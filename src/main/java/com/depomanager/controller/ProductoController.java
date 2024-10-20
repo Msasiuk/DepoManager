@@ -1,6 +1,9 @@
 package com.depomanager.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,20 +26,23 @@ public class ProductoController extends BaseController<Producto, Long> {
 
     @Override
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Producto producto) {
-    	if (productoRepository.existsByCodigo(producto.getCodigo())) {
-            return ResponseEntity.badRequest().body("El código del producto ya existe.");
+    public ResponseEntity<Map<String, String>> create(@RequestBody Producto producto) {
+        // Validar si el código ya existe
+        if (productoRepository.existsByCodigo(producto.getCodigo())) {
+            // Devolver 409 Conflict si el código ya existe
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "El código del producto ya existe."));
         }
 
-    	 // Usar el FechaService para establecer fechas por defecto
+        // Usar FechaService para establecer fechas por defecto
         fechaService.establecerFechasPorDefecto(producto);
 
-        // Valores por defecto
-        if (producto.getCantidad() == 0) producto.setCantidad(0);
+        // Valores por defecto para stock
         if (producto.getStockMaximo() == 0) producto.setStockMaximo(0);
         if (producto.getStockMinimo() == 0) producto.setStockMinimo(0);
 
         productoRepository.save(producto);
-        return ResponseEntity.ok("Producto creado exitosamente.");
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("message", "Producto creado exitosamente."));
     }
 }

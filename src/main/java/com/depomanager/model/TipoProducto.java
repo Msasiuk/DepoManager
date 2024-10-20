@@ -1,7 +1,5 @@
 package com.depomanager.model;
 
-import com.depomanager.controller.HasCodigo;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "tipo_producto")
-public class TipoProducto extends Fechas implements HasCodigo {
+public class TipoProducto extends Fechas {
 
     @Getter
     @Id
