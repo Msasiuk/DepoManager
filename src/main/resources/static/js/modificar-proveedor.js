@@ -16,6 +16,7 @@ function volver() {
 }
 
 async function cargarProveedor(id) {
+	
   try {
     const response = await fetch(`${API_BASE_URL}/proveedores/${id}`);
     const proveedor = await response.json();

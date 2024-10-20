@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function inicializarFormulario() {
   const proveedorForm = document.getElementById('proveedor-form');
+  
   proveedorForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -17,7 +18,7 @@ function inicializarFormulario() {
       nombre: document.getElementById('proveedor-nombre').value,
       razonSocial: document.getElementById('proveedor-razon-social').value,
 	  fechaInicio: new Date().toISOString().split('T')[0], // Fecha actual
-      fechaFin: document.getElementById('proveedor-fecha-fin').value || '9999-12-31',
+	  fechaFin: document.getElementById('proveedor-fecha-fin').value || '9999-12-31',
     };
 
     await crearProveedor(nuevoProveedor);

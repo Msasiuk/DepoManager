@@ -1,7 +1,5 @@
 package com.depomanager.model;
 
-import com.depomanager.controller.HasCodigo;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "proveedor")
-public class Proveedor extends Fechas implements HasCodigo {
+public class Proveedor extends Fechas {
 	
     @Getter
     @Id
@@ -27,11 +25,6 @@ public class Proveedor extends Fechas implements HasCodigo {
     @Column(name = "cuit_cuil", length = 50, nullable = false, unique = true)
     private String cuitCuil; //Cuit-cuil
     
-    @Override
-    public String getCodigo() {
-        return cuitCuil;
-    }
-
     @Getter @Setter
     @Column(name = "nombre", length = 255, nullable = false)
     private String nombre;

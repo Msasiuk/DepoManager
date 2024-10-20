@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modificar Tipo Producto</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Modificar Tipo Producto</h1>
+
+    <section id="producto-section">
+     <h2>Editar Tipo Producto</h2>
+
+	 <!-- Formulario para modificar un producto -->
+  <form id="modificar-tipo-producto-form">
+    <input type="hidden" id="producto-id" />
+
+	<input type="text" id="tipo-codigo" placeholder="Código" required>
+	<input type="text" id="tipo-descripcion" placeholder="Descripción" required>
+
+    <label for="tipo-fecha-inicio">Fecha Inicio</label>
+    <input type="date" id="tipo-fecha-inicio" disabled />
+
+    <label for="tipo-fecha-fin">Fecha Finalización</label>
+    <input type="date" id="tipo-fecha-fin" />
+
+    <button type="submit">Guardar Cambios</button>
+	<button type="button" onclick="volver()">Volver</button>
+ </form>
+ </section>
+
+  <script src="js/modificar-tipo-producto.js"></script>
+</body>
+</html>
