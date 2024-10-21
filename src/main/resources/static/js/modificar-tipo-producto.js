@@ -1,11 +1,10 @@
 const API_BASE_URL = 'http://localhost:8080/api';
-const productoId = new URLSearchParams(window.location.search).get('id'); // Obtener ID del producto desde la URL
+const tipoProductoId = new URLSearchParams(window.location.search).get('id'); // Obtener ID del producto desde la URL
 
 document.addEventListener('DOMContentLoaded', () => {
-  cargarProducto(productoId);
-  fetchTiposProducto();
+  cargarTipoProducto(tipoProductoId);
 
-  document.getElementById('modificar-producto-form').addEventListener('submit', async (event) => {
+  document.getElementById('modificar-tipo-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     await guardarCambios();
   });
@@ -13,27 +12,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Redirigir a la página principal al hacer clic en "Volver"
 function volver() {
-  window.location.href = 'productos.html';
+  window.location.href = 'tipos-producto.html';
 }
 
 // Cargar datos del producto en el formulario
-async function cargarProducto(id) {
+async function cargarTipoProducto(id) {
 	
   try {
-    const response = await fetch(`${API_BASE_URL}/productos/${id}`);
-    const producto = await response.json();
+    const response = await fetch(`${API_BASE_URL}/tipos-producto/${id}`);
+	if (!response.ok) throw new Error('Tipo producto no encontrado');
+    const tipoProducto = await response.json();
 
-    document.getElementById('producto-id').value = producto.id;
-    document.getElementById('producto-codigo').value = producto.codigo;
-    document.getElementById('producto-descripcion').value = producto.descripcion;
-    document.getElementById('producto-fecha-inicio').value = formatFecha(producto.fechaInicio);
-    document.getElementById('producto-fecha-fin').value = formatFecha(producto.fechaFin);
-    document.getElementById('producto-tipo').value = producto.tipoProducto.id;
-    document.getElementById('producto-cantidad').value = producto.cantidad;
-    document.getElementById('producto-stock-max').value = producto.stockMaximo;
-    document.getElementById('producto-stock-min').value = producto.stockMinimo;
+    document.getElementById('tipo-codigo').value = tipoProducto.codigo;
+    document.getElementById('tipo-descripcion').value = tipoProducto.descripcion;
+    document.getElementById('tipo-fecha-inicio').value = formatFecha(tipoProducto.fechaInicio);
+    document.getElementById('tipo-fecha-fin').value = formatFecha(tipoProducto.fechaFin);
   } catch (error) {
-    console.error('Error al cargar el producto:', error);
+    console.error('Error al cargar el tipo producto:', error);
   }
 }
 
@@ -42,60 +37,26 @@ function formatFecha(fecha) {
   return new Date(fecha).toISOString().split('T')[0];
 }
 
-// Obtener y llenar los tipos de producto en el <select>
-async function fetchTiposProducto() {
-  try {
-    const response = await fetch(`${API_BASE_URL}/tipo-productos`);
-    const tipos = await response.json();
-    renderTiposProducto(tipos);
-  } catch (error) {
-    console.error('Error al cargar tipos de productos:', error);
-  }
-}
-
-function renderTiposProducto(tipos) {
-  const tipoSelect = document.getElementById('producto-tipo');
-  tipoSelect.innerHTML = '';
-
-  tipos.forEach(tipo => {
-    const option = document.createElement('option');
-    option.value = tipo.id;
-    option.textContent = tipo.descripcion;
-    tipoSelect.appendChild(option);
-  });
-}
-
 // Guardar los cambios en el producto
 async function guardarCambios() {
-	// Validación de valores positivos
-		    const stockMaximo = parseInt(document.getElementById('producto-stock-max').value) || 0;
-		    const stockMinimo = parseInt(document.getElementById('producto-stock-min').value) || 0;
-
-		    if (stockMaximo < 0 || stockMinimo < 0) {
-		      alert('Los stocks deben ser valores positivos.');
-		      return;
-		    }
-  const producto = {
-    id: document.getElementById('producto-id').value,
-    codigo: document.getElementById('producto-codigo').value,
-    descripcion: document.getElementById('producto-descripcion').value,
-    fechaInicio: document.getElementById('producto-fecha-inicio').value,
-    fechaFin: document.getElementById('producto-fecha-fin').value,
-    tipoProducto: { id: document.getElementById('producto-tipo').value },
-    stockMaximo: parseInt(document.getElementById('producto-stock-max').value) || 0,
-    stockMinimo: parseInt(document.getElementById('producto-stock-min').value) || 0,
+	const tipoProducto = {
+     id: tipoProductoId, // Aquí es obligatorio para guardar los cambios
+    codigo: document.getElementById('tipo-codigo').value,
+    descripcion: document.getElementById('tipo-descripcion').value,
+    fechaInicio: document.getElementById('tipo-fecha-inicio').value,
+    fechaFin: document.getElementById('tipo-fecha-fin').value,
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}/productos/${producto.id}`, {
+    const response = await fetch(`${API_BASE_URL}/tipos-producto/${tipoProducto.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(producto),
+      body: JSON.stringify(tipoProducto),
     });
 
     if (response.ok) {
-      alert('Producto modificado exitosamente.');
-      window.location.href = 'productos.html'; // Redirigir a la lista de productos
+      alert('Tipo producto modificado exitosamente.');
+      window.location.href = 'tipos-producto.html'; // Redirigir a la lista de tipos producto
     } else {
       const errorText = await response.text();
       alert(`Error: ${errorText}`);
