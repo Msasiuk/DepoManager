@@ -2,11 +2,15 @@ const API_BASE_URL = 'http://localhost:8080/api';
 
 // Inicializar productos y tipos al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-  fetchProductos();
-  fetchTiposProducto();
-  inicializarFormulario();
-});
+	fetchProductos(); // Carga todos los productos
+	fetchTiposProducto(); // Carga los tipos de producto
 
+	inicializarFormulario(); // Configura el formulario de creación
+	
+	// Inicializa el evento para filtrar productos
+	const buscarCodigoInput = document.getElementById('buscar-codigo');
+	buscarCodigoInput.addEventListener('input', filtrarProductos);
+});
 
 // Inicializar evento del formulario
 function inicializarFormulario() {
@@ -17,11 +21,11 @@ function inicializarFormulario() {
     event.preventDefault(); // Evitar recarga de página
 
     // Validación de valores positivos
-	const stockMaximo = parseInt(document.getElementById('producto-stock-max').value);
-	const stockMinimo = parseInt(document.getElementById('producto-stock-min').value);
-	const puntoReposicion = parseInt(document.getElementById('punto-reposicion').value);
+	const stockMaximo = parseInt(document.getElementById('producto-stock-max').value) || 0;
+	const stockMinimo = parseInt(document.getElementById('producto-stock-min').value) || 0;
+	const puntoReposicion = parseInt(document.getElementById('punto-reposicion').value) || 0;
 
-	if (stockMaximo <= 0 || stockMinimo <= 0 || puntoReposicion <= 0) {
+	if (stockMaximo < 0 || stockMinimo < 0 || puntoReposicion < 0) {
 	      alert('Los stocks y el punto de reposición deben ser valores positivos.');
 	      return;
 	}
@@ -29,9 +33,9 @@ function inicializarFormulario() {
 	const nuevoProducto = {
 	      codigo: document.getElementById('producto-codigo').value,
 	      descripcion: document.getElementById('producto-descripcion').value,
-	      puntoReposicion: puntoReposicion,
-	      stockMaximo: stockMaximo,
-	      stockMinimo: stockMinimo,
+		  puntoReposicion: puntoReposicion,
+		  stockMaximo: stockMaximo,
+		  stockMinimo: stockMinimo,
 	      tipoProducto: { id: parseInt(document.getElementById('producto-tipo').value) },
 	      tieneVencimiento: document.getElementById('producto-tiene-vencimiento').value,
 	      //fechaVencimiento: fechaVencimientoInput.value,
@@ -40,7 +44,7 @@ function inicializarFormulario() {
 	      cantidad: 0,
 	};
 	
-	console.log(JSON.stringify(nuevoProducto)); // Verifica la salida en la consola
+	//console.log(JSON.stringify(nuevoProducto)); // Verifica la salida en la consola
 
 	// Llamada al backend
 	await crearProducto(nuevoProducto);
@@ -85,8 +89,13 @@ async function fetchProductos() {
 	if (!response.ok) {
 	      throw new Error(`Error: ${response.status}`);
 	    }
-	    const productos = await response.json();
-	    renderProductos(Array.isArray(productos) ? productos : []);
+	const productos = await response.json();
+	
+	// Limpiar el campo de búsqueda al recargar la lista
+    document.getElementById('buscar-codigo').value = '';	
+	
+	// Llamar a la función para renderizar los productos
+	renderProductos(Array.isArray(productos) ? productos : []);
 	  } catch (error) {
 	    console.error('Error al cargar productos:', error);
 	}
@@ -95,28 +104,28 @@ async function fetchProductos() {
 // Renderizar los productos para ser mostrados en pantalla
 function renderProductos(productos) {
   const list = document.getElementById('producto-list');
-  list.innerHTML = '';
+  list.innerHTML = ''; // Limpiar la lista
 
   productos.forEach((producto) => {
-	const tieneVencimiento = producto.tieneVencimiento ? 'Sí' : 'No';
-	//const tieneVencimiento = producto.tieneVencimiento === true ? 'Sí' : 'No';
-	const item = document.createElement('div');
-	    item.className = 'list-item';
+      const tieneVencimiento = producto.tieneVencimiento ? 'Sí' : 'No';
 
-	    item.innerHTML = `
-	      <div>
-	        <strong>${producto.codigo}</strong> - ${producto.descripcion}<br>
-	        <small>Fecha Inicio: ${formatFecha(producto.fechaInicio)} | Fecha Fin: ${formatFecha(producto.fechaFin)}</small><br>
-	        <small>Tiene Vencimiento: ${tieneVencimiento}</small><br>
-	        <small>Tipo: ${producto.tipoProducto.descripcion}</small><br>
-	        <small>Stock Máximo: ${producto.stockMaximo} | Stock Mínimo: ${producto.stockMinimo} | Punto Reposición: ${producto.puntoReposicion}</small>
-	      </div>
-	      <button onclick="deleteProducto(${producto.id})">Eliminar</button>
-	      <a href="modificar-producto.html?id=${producto.id}"><button>Modificar</button></a>
-	    `;
-	    list.appendChild(item);
-	  });
-	}
+      const item = document.createElement('div');
+      item.className = 'list-item';
+
+      item.innerHTML = `
+        <div>
+          <strong>${producto.codigo}</strong> - ${producto.descripcion}<br>
+          <small>Fecha Inicio: ${formatFecha(producto.fechaInicio)} | Fecha Fin: ${formatFecha(producto.fechaFin)}</small><br>
+          <small>Tiene Vencimiento: ${tieneVencimiento}</small><br>
+          <small>Tipo: ${producto.tipoProducto.descripcion}</small><br>
+          <small>Stock Máximo: ${producto.stockMaximo} | Stock Mínimo: ${producto.stockMinimo} | Punto Reposición: ${producto.puntoReposicion}</small>
+        </div>
+        <button onclick="deleteProducto(${producto.id})">Eliminar</button>
+        <a href="modificar-producto.html?id=${producto.id}"><button>Modificar</button></a>
+      `;
+      list.appendChild(item);
+  });
+}
 
 // Formatear fecha como YYYY-MM-DD
 function formatFecha(fecha) {
@@ -178,4 +187,18 @@ function renderTiposProducto(tipos) {
       option.textContent = tipo.descripcion;
       tipoSelect.appendChild(option);
     });
+}
+
+function filtrarProductos() {
+  const terminoBusqueda = document.getElementById('buscar-codigo').value.toLowerCase();
+  const productos = document.querySelectorAll('#producto-list .list-item');
+
+  productos.forEach((producto) => {
+    const codigoProducto = producto.querySelector('strong').textContent.toLowerCase();
+    if (codigoProducto.includes(terminoBusqueda)) {
+      producto.style.display = ''; // Mostrar si coincide
+    } else {
+      producto.style.display = 'none'; // Ocultar si no coincide
+    }
+  });
 }

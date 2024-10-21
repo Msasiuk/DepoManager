@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   cargarProducto(productoId);
   fetchTiposProducto();
 
-  document.getElementById('modificar-producto-form').addEventListener('submit', async (event) => {
+ document.getElementById('modificar-producto-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     await guardarCambios();
   });
@@ -20,6 +20,7 @@ async function cargarProducto(id) {
   try {
     const response = await fetch(`${API_BASE_URL}/productos/${id}`);
     if (!response.ok) throw new Error('Producto no encontrado');
+    
     const producto = await response.json();
 
     document.getElementById('producto-codigo').value = producto.codigo;
@@ -27,10 +28,14 @@ async function cargarProducto(id) {
     document.getElementById('producto-fecha-inicio').value = formatFecha(producto.fechaInicio);
     document.getElementById('producto-fecha-fin').value = formatFecha(producto.fechaFin);
     document.getElementById('producto-tiene-vencimiento').value = producto.tieneVencimiento.toString();
-    document.getElementById('producto-tipo').value = producto.tipoProducto.id;
     document.getElementById('producto-punto-reposicion').value = producto.puntoReposicion;
     document.getElementById('producto-stock-max').value = producto.stockMaximo;
     document.getElementById('producto-stock-min').value = producto.stockMinimo;
+
+    // Esperar a que se carguen los tipos de producto y luego seleccionar el valor adecuado
+    await fetchTiposProducto();
+    document.getElementById('producto-tipo').value = producto.tipoProducto.id;
+
   } catch (error) {
     console.error('Error al cargar el producto:', error);
   }
@@ -44,27 +49,26 @@ function formatFecha(fecha) {
 // Guardar los cambios en el producto
 async function guardarCambios() {
 	// Validación de valores positivos
-		const stockMaximo = parseInt(document.getElementById('producto-stock-max').value);
-		const stockMinimo = parseInt(document.getElementById('producto-stock-min').value);
-		const puntoReposicion = parseInt(document.getElementById('punto-reposicion').value);
+		const stockMaximo = parseInt(document.getElementById('producto-stock-max').value) || 0;
+		const stockMinimo = parseInt(document.getElementById('producto-stock-min').value) || 0;
+		const puntoReposicion = parseInt(document.getElementById('producto-punto-reposicion').value )|| 0;
 
-		if (stockMaximo <= 0 || stockMinimo <= 0 || puntoReposicion <= 0) {
+		if (stockMaximo < 0 || stockMinimo < 0 || puntoReposicion < 0) {
 		      alert('Los stocks y el punto de reposición deben ser valores positivos.');
 		      return;
 		}
 		
   const producto = {
-    id: productoId,
+    id: productoId, // Aquí es obligatorio para guardar los cambios
     codigo: document.getElementById('producto-codigo').value,
     descripcion: document.getElementById('producto-descripcion').value,
-    fechaInicio: document.getElementById('producto-fecha-inicio').value,
-    fechaFin: document.getElementById('producto-fecha-fin').value,
-    tieneVencimiento: document.getElementById('producto-tiene-vencimiento').value === 'true',
-    tipoProducto: { id: parseInt(document.getElementById('producto-tipo').value) },
-    puntoReposicion: parseInt(document.getElementById('producto-punto-reposicion').value) || 0,
-    stockMaximo: parseInt(document.getElementById('producto-stock-max').value) || 0,
-    stockMinimo: parseInt(document.getElementById('producto-stock-min').value) || 0,
-  };
+	puntoReposicion: puntoReposicion,
+	stockMaximo: stockMaximo,
+    stockMinimo: stockMinimo,
+	tipoProducto: { id: parseInt(document.getElementById('producto-tipo').value) },
+	tieneVencimiento: document.getElementById('producto-tiene-vencimiento').value === 'true',
+	fechaFin: document.getElementById('producto-fecha-fin').value,
+	};
 
   try {
     const response = await fetch(`${API_BASE_URL}/productos/${producto.id}`, {
@@ -91,8 +95,9 @@ async function fetchTiposProducto() {
   try {
     const response = await fetch(`${API_BASE_URL}/tipos-producto`);
     if (!response.ok) throw new Error(`Error: ${response.status}`);
+    
     const tipos = await response.json();
-    renderTiposProducto(Array.isArray(tipos) ? tipos : []);
+    renderTiposProducto(tipos);
   } catch (error) {
     console.error('Error al cargar tipos de productos:', error);
   }
