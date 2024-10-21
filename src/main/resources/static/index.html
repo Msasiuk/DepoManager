@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modificar Producto</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Modificar Producto</h1>
+
+  <section id="producto-section">
+    <h2>Editar Producto</h2>
+
+    <form id="modificar-producto-form">
+      <input type="text" id="producto-codigo" placeholder="Código" required />
+      <input type="text" id="producto-descripcion" placeholder="Descripción" required />
+
+      <label for="producto-tiene-vencimiento">¿Tiene vencimiento?</label>
+      <select id="producto-tiene-vencimiento" required>
+        <option value="false">No</option>
+        <option value="true">Sí</option>
+      </select>
+
+      <label for="producto-fecha-inicio">Fecha Inicio</label>
+      <input type="date" id="producto-fecha-inicio" disabled />
+
+      <label for="producto-fecha-fin">Fecha Finalización</label>
+      <input type="date" id="producto-fecha-fin" />
+
+      <select id="producto-tipo" required>
+        <option value="" disabled selected>Tipo de producto</option>
+      </select>
+
+      <label for="producto-punto-reposicion">Punto Reposición</label>
+      <input type="number" id="producto-punto-reposicion" />
+
+      <label for="producto-stock-max">Stock Máximo</label>
+      <input type="number" id="producto-stock-max" />
+
+      <label for="producto-stock-min">Stock Mínimo</label>
+      <input type="number" id="producto-stock-min" />
+
+      <button type="submit">Guardar Cambios</button>
+      <button type="button" onclick="volver()">Volver</button>
+    </form>
+  </section>
+
+  <script src="js/modificar-producto.js"></script>
+</body>
+</html>
