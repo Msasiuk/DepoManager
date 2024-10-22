@@ -1,13 +1,10 @@
 package com.depomanager.model;
 
-import java.util.List;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,8 +28,10 @@ public class Deposito extends Fechas {
     @Getter @Setter
     @Column(name = "descripcion", length = 255, nullable = false)
     private String descripcion;
+ 
 
-    @Getter @Setter
+    // Ver si se implementa nueva clase producto-deposito
+    /*@Getter @Setter
     @OneToMany(mappedBy = "deposito")
-    private List<ProductoDeposito> listaProductos;
+    private List<ProductoDeposito> listaProductos;*/
 }

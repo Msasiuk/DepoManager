@@ -44,14 +44,13 @@ function inicializarFormulario() {
 	      cantidad: 0,
 	};
 	
-	//console.log(JSON.stringify(nuevoProducto)); // Verifica la salida en la consola
+	console.log(JSON.stringify(nuevoProducto)); // Verifica la salida en la consola
 
 	// Llamada al backend
 	await crearProducto(nuevoProducto);
     
     // Resetear el formulario y actualizar la lista de productos
     productoForm.reset();
-    productoIdActual = null;
     fetchProductos();
   });
 }
