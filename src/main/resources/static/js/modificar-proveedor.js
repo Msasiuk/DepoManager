@@ -17,9 +17,10 @@ function volver() {
 
 async function cargarProveedor(id) {
 	
-  try {
+try {
     const response = await fetch(`${API_BASE_URL}/proveedores/${id}`);
-    const proveedor = await response.json();
+    if (!response.ok) throw new Error('Proveedor no encontrado');
+	const proveedor = await response.json();
 
     document.getElementById('proveedor-cuit-cuil').value = proveedor.cuitCuil;
     document.getElementById('proveedor-nombre').value = proveedor.nombre;
@@ -36,31 +37,32 @@ function formatFecha(fecha) {
   return new Date(fecha).toISOString().split('T')[0];
 }
 
-async function guardarCambios(id) {
-  const proveedor = {
-    cuitCuil: document.getElementById('proveedor-cuit-cuil').value,
-    nombre: document.getElementById('proveedor-nombre').value,
-    razonSocial: document.getElementById('proveedor-razon-social').value,
-	fechaInicio: document.getElementById('proveedor-fecha-inicio').value,
-    fechaFin: document.getElementById('proveedor-fecha-fin').value,
-  };
+async function guardarCambios() {
+	const proveedor = {
+	    id: proveedorId,  // Asignar correctamente el ID desde la variable global
+	    cuitCuil: document.getElementById('proveedor-cuit-cuil').value,
+	    nombre: document.getElementById('proveedor-nombre').value,
+	    razonSocial: document.getElementById('proveedor-razon-social').value,
+	    fechaInicio: document.getElementById('proveedor-fecha-inicio').value,
+	    fechaFin: document.getElementById('proveedor-fecha-fin').value,
+	  };
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/proveedores/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(proveedor),
-    });
+	   try {
+	      const response = await fetch(`${API_BASE_URL}/proveedores/${proveedor.id}`, {
+	        method: 'PUT',
+	        headers: { 'Content-Type': 'application/json' },
+	        body: JSON.stringify(proveedor),
+	      });
 
-    if (response.ok) {
-      alert('Proveedor modificado exitosamente.');
-	  window.location.href = 'proveedores.html';
-    } else {
-		const errorText = await response.text();
-		     alert(`Error: ${errorText}`);
-	 }
-  } catch (error) {
-    console.error('Error al modificar proveedor:', error);
-	alert('Error al guardar los cambios.');
-  }
-}
+	      if (response.ok) {
+	        alert('Proveedor modificado exitosamente.');
+	        window.location.href = 'proveedores.html';
+	      } else {
+	        const errorText = await response.text();
+	        alert(`Error: ${errorText}`);
+	      }
+	    } catch (error) {
+	      console.error('Error al modificar proveedor:', error);
+	      alert('Error al guardar los cambios.');
+	    }
+	  }

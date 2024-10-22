@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modificar Depósito</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Modificar Depósito</h1>
+
+  <section id="deposito-section">
+   
+    <form id="modificar-deposito-form">
+      <input type="text" id="deposito-codigo" placeholder="Código" required />
+      <input type="text" id="deposito-descripcion" placeholder="Descripción" required />
+      
+	  <label for="deposito-fecha-inicio">Fecha Inicio</label>
+	  <input type="date" id="deposito-fecha-inicio" disabled>
+	        
+	  <label for="deposito-fecha-fin">Fecha Finalización</label>
+	  <input type="date" id="deposito-fecha-fin">
+			
+      <button type="submit">Guardar Cambios</button>
+      <button type="button" onclick="volver()">Volver</button>
+    </form>
+  </section>
+
+  <script src="js/modificar-deposito.js"></script>
+</body>
+</html>

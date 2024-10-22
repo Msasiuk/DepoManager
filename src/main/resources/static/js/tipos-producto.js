@@ -83,7 +83,7 @@ async function fetchTiposProducto() {
 
 // Renderizar tipos de producto en la pantalla
 function renderTiposProducto(tiposProducto) {
-  const list = document.getElementById('tipo-producto-list');
+  const list = document.getElementById('tipo-list');
   list.innerHTML = '';
 
   tiposProducto.forEach((tipoProducto) => {
@@ -124,7 +124,7 @@ async function deleteTipoProducto(id) {
 
 function filtrarTiposProducto() {
   const terminoBusqueda = document.getElementById('buscar-codigo').value.toLowerCase();
-  const tiposProducto = document.querySelectorAll('#tipo-producto-list .list-item');
+  const tiposProducto = document.querySelectorAll('#tipo-list .list-item');
 
   tiposProducto.forEach((tipoProducto) => {
     const codigoTipoProducto = tipoProducto.querySelector('strong').textContent.toLowerCase();

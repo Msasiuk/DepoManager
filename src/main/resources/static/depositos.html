@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Depósitos</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Gestión de Depósitos</h1>
+
+  <section id="deposito-section">
+    <h2>Depósitos</h2>
+
+	<input type="text" id="buscar-codigo" placeholder="Buscar por código...">
+	
+    <form id="deposito-form">
+      <input type="text" id="deposito-codigo" placeholder="Código" required>
+      <input type="text" id="deposito-descripcion" placeholder="Descripción" required>
+	  <label for="deposito-fecha-fin">Fecha Finalización 	    
+	  	  <input type="date" id="deposito-fecha-fin" value="9999-12-31">
+	  </label>
+	  <button type="submit">Crear Depósito</button>
+    </form>
+
+    <div id="deposito-list"></div>
+  </section>
+
+  <script src="js/depositos.js"></script>
+</body>
+</html>
