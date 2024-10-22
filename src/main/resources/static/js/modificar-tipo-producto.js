@@ -40,7 +40,7 @@ function formatFecha(fecha) {
 // Guardar los cambios en el producto
 async function guardarCambios() {
 	const tipoProducto = {
-     id: tipoProductoId, // Aquí es obligatorio para guardar los cambios
+    id: tipoProductoId, // Aquí es obligatorio para guardar los cambios
     codigo: document.getElementById('tipo-codigo').value,
     descripcion: document.getElementById('tipo-descripcion').value,
     fechaInicio: document.getElementById('tipo-fecha-inicio').value,

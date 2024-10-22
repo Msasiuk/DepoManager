@@ -41,4 +41,5 @@ public class DepositoController extends BaseController<Deposito, Long> {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(Map.of("message", "Deposito creado exitosamente."));
     }
+
 }

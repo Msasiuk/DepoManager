@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Redirigir a la página principal al hacer clic en "Volver"
 function volver() {
   window.location.href = 'productos.html';
 }

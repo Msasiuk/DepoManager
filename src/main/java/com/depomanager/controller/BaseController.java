@@ -20,6 +20,9 @@ public abstract class BaseController<T, ID> {
     @Autowired
     private JpaRepository<T, ID> repository;
 
+    // Método abstracto para la validación del código (implementado en los controladores específicos)
+   // protected abstract boolean existsByCodigo(String codigo);
+    
     // Crear entidad (sin validación de código)
     @PostMapping
     public ResponseEntity<Map<String, String>> create(@RequestBody T entity) {
