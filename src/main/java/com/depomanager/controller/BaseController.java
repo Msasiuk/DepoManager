@@ -1,6 +1,5 @@
 package com.depomanager.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,65 +17,60 @@ import org.springframework.web.bind.annotation.RequestBody;
 public abstract class BaseController<T, ID> {
 
     @Autowired
-    private JpaRepository<T, ID> repository;
-
-    // Método abstracto para la validación del código (implementado en los controladores específicos)
-   // protected abstract boolean existsByCodigo(String codigo);
+	protected JpaRepository<T, ID> repository;
     
-    // Crear entidad (sin validación de código)
-    @PostMapping
-    public ResponseEntity<Map<String, String>> create(@RequestBody T entity) {
-        Map<String, String> response = new HashMap<>();
-
-        // Guardar la entidad sin validar el código
-        repository.save(entity);
-        response.put("message", "Entidad creada exitosamente.");
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     // Obtener todos los elementos
     @GetMapping
     public List<T> getAll() {
         return repository.findAll();
     }
-
+    
     // Obtener un elemento por ID
     @GetMapping("/{id}")
     public ResponseEntity<T> getById(@PathVariable ID id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+    
+    // Crear una nueva entidad (Plantilla)
+    @PostMapping
+    public ResponseEntity<Map<String, String>> create(@RequestBody T entity) {
+        if (existeEntidadDuplicada(entity)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "El elemento ya existe."));
+        }
+        preGuardarEntidad(entity);  // Gancho para personalización
+        repository.save(entity);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of("message", "Elemento creado exitosamente."));
     }
 
-    // Actualizar entidad (sin validación de código)
+    // Actualizar entidad
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, String>> update(@PathVariable ID id, @RequestBody T entity) {
-        Map<String, String> response = new HashMap<>();
-
-        // Verificar si existe la entidad por ID antes de actualizar
         if (!repository.existsById(id)) {
-            response.put("message", "Entidad no encontrada.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Elemento no encontrado."));
         }
-
-        // Guardar la entidad sin validar el código
+        preGuardarEntidad(entity);  // Gancho para modificaciones
         repository.save(entity);
-        response.put("message", "Entidad modificada exitosamente.");
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(Map.of("message", "Elemento actualizado."));
     }
 
     // Eliminar un elemento por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> delete(@PathVariable ID id) {
-        Map<String, String> response = new HashMap<>();
-
         if (repository.existsById(id)) {
             repository.deleteById(id);
-            response.put("message", "Elemento eliminado exitosamente.");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseEntity.ok(Map.of("message", "Elemento eliminado."));
         }
-
-        response.put("message", "Elemento no encontrado.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", "Elemento no encontrado."));
     }
+
+    // Métodos abstractos para personalización
+    protected abstract boolean existeEntidadDuplicada(T entity);
+
+    protected void preGuardarEntidad(T entity) {}
 }

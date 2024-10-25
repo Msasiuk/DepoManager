@@ -13,4 +13,6 @@ public interface IProveedorRepository extends JpaRepository<Proveedor, Long> {
 
     // Busca un proveedor por su CUIT/CUIL
     Optional<Proveedor> findByCuitCuil(String cuitCuil);
+
+	boolean existsByCuitCuilAndIdNot(String cuitCuil, Long id);
 }

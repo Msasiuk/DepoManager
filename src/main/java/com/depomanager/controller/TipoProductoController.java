@@ -1,11 +1,13 @@
 package com.depomanager.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.depomanager.model.TipoProducto;
 import com.depomanager.repository.ITipoProductoRepository;
 import com.depomanager.service.FechaService;
-
 
 @RestController
 @RequestMapping("/api/tipos-producto")
@@ -25,22 +26,39 @@ public class TipoProductoController extends BaseController<TipoProducto, Long> {
 	@Autowired
     private FechaService fechaService;
 	
-	@Override
-    @PostMapping
-    public ResponseEntity<Map<String, String>> create(@RequestBody TipoProducto tipoProducto) {
-        // Validar si el de ya existe
-        if (tipoProductoRepository.existsByCodigo(tipoProducto.getCodigo())) {
-            // Devolver 409 Conflict si el código ya existe
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "El código del tipo de producto ya existe."));
-        }
+	 @Override
+	    protected boolean existeEntidadDuplicada(TipoProducto tipoProducto) {
+	        return tipoProductoRepository.existsByCodigo(tipoProducto.getCodigo());
+	    }
 
-        // Usar FechaService para establecer fechas por defecto
-        fechaService.establecerFechasPorDefecto(tipoProducto);
+	   
+	 @Override
+	    protected void preGuardarEntidad(TipoProducto tipoProducto) {
+	        fechaService.establecerFechasPorDefecto(tipoProducto);
+	    }
+	 
+	 @PutMapping("/{id}")
+	    public ResponseEntity<Map<String, String>> update(@PathVariable Long id, @RequestBody TipoProducto tipoProductoDetails) {
+	        Map<String, String> response = new HashMap<>();
 
-        tipoProductoRepository.save(tipoProducto);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Tipo producto creado exitosamente."));
-    }
+	        return repository.findById(id).map(tipoProducto -> {
+	            // Verificar si el código pertenece a otro tipo producto
+	            if (tipoProductoRepository.existsByCodigoAndIdNot(tipoProductoDetails.getCodigo(), id)) {
+	                response.put("message", "El código del tipo producto ya existe en otro registro.");
+	                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+	            }
+
+	            // Actualizar los campos del tipo producto
+	            tipoProducto.setDescripcion(tipoProductoDetails.getDescripcion());
+	            tipoProducto.setCodigo(tipoProductoDetails.getCodigo());
+
+	            repository.save(tipoProducto);
+	            response.put("message", "Tipo producto modificado exitosamente.");
+	            return ResponseEntity.ok(response);
+	        }).orElseGet(() -> {
+	            response.put("message", "Tipo producto no encontrado.");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	        });
+	    }
 }
     

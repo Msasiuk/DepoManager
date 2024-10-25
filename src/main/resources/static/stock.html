@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Stock - DepoManager</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+	
+  <h1>Consulta de Stock en Depósitos</h1>
+
+  <section id="stock-section">
+    <a href="index.html"><button>Volver</button></a>
+    <h2>Stock por Depósito</h2>
+
+    <!-- Selector de depósito -->
+    <select id="deposito-id" required>
+      <option value="" disabled selected>Seleccione un Depósito</option>
+    </select>
+
+    <!-- Botón para mostrar stock -->
+    <button id="ver-stock-btn">Ver Stock</button>
+
+    <!-- Mostrar stock -->
+    <div id="stock-list"></div>
+  </section>
+
+  <script src="js/stock.js"></script>
+</body>
+</html>

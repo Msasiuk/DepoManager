@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Movimientos de Stock - DepoManager</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Gestión de Movimientos de Stock</h1>
+
+  <section id="movimiento-section">
+    <a href="index.html"><button>Volver</button></a>
+    <h2>Movimientos de Stock</h2>
+
+    <!-- Formulario para registrar un movimiento de stock -->
+	<form id="movimiento-form">
+	  <select id="tipo-movimiento" required>
+	    <option value="" disabled selected>Tipo de Movimiento</option>
+	    <option value="INGRESO">Ingreso</option>
+	    <option value="EGRESO">Egreso</option>
+	    <option value="ROTACION">Rotación</option>
+	  </select>
+
+	  <select id="proveedor-id" style="display:none;">
+	    <option value="" disabled selected>Seleccione un Proveedor</option>
+	  </select>
+
+	  <select id="deposito-origen-id" style="display:none;">
+	    <option value="" disabled selected>Depósito Origen</option>
+	  </select>
+
+	  <select id="deposito-destino-id" style="display:none;">
+	    <option value="" disabled selected>Depósito Destino</option>
+	  </select>
+
+	  <input type="text" id="nro-comprobante" placeholder="Número de Comprobante">
+
+	  <div id="detalle-producto-list"></div>
+
+	  <button type="button" id="agregar-producto-btn">Agregar Producto</button>
+	  <button type="submit">Registrar Movimiento</button>
+	</form>
+
+    <div id="movimiento-list"></div>
+  </section>
+
+  <script src="js/movimiento-stock.js"></script>
+</body>
+</html>

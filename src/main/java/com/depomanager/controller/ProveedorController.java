@@ -1,11 +1,13 @@
 package com.depomanager.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,20 +27,37 @@ public class ProveedorController extends BaseController<Proveedor, Long> {
     private FechaService fechaService;
 
     @Override
-    @PostMapping
-    public ResponseEntity<Map<String, String>> create(@RequestBody Proveedor proveedor) {
-        // Validar si el de ya existe
-        if (proveedorRepository.existsByCuitCuil(proveedor.getCuitCuil())) {
-            // Devolver 409 Conflict si el código ya existe
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "El Cuit/Cuil del proveedor ya existe."));
-        }
+    protected boolean existeEntidadDuplicada(Proveedor proveedor) {
+        return proveedorRepository.existsByCuitCuil(proveedor.getCuitCuil());
+    }
 
-        // Usar FechaService para establecer fechas por defecto
+    @Override
+    protected void preGuardarEntidad(Proveedor proveedor) {
         fechaService.establecerFechasPorDefecto(proveedor);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, String>> update(@PathVariable Long id, @RequestBody Proveedor proveedorDetails) {
+        Map<String, String> response = new HashMap<>();
 
-        proveedorRepository.save(proveedor);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Proveedor creado exitosamente."));
+        return repository.findById(id).map(proveedor -> {
+            // Verificar si el CUIT/CUIL pertenece a otro proveedor
+            if (proveedorRepository.existsByCuitCuilAndIdNot(proveedorDetails.getCuitCuil(), id)) {
+                response.put("message", "El CUIT/CUIL del proveedor ya existe en otro registro.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
+
+            // Actualizar los campos del proveedor
+            proveedor.setCuitCuil(proveedorDetails.getCuitCuil());
+            proveedor.setNombre(proveedorDetails.getNombre());
+            proveedor.setRazonSocial(proveedorDetails.getRazonSocial());
+
+            repository.save(proveedor);
+            response.put("message", "Proveedor modificado exitosamente.");
+            return ResponseEntity.ok(response);
+        }).orElseGet(() -> {
+            response.put("message", "Proveedor no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        });
     }
 }
