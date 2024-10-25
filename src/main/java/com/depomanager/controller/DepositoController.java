@@ -1,11 +1,13 @@
 package com.depomanager.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,21 +27,36 @@ public class DepositoController extends BaseController<Deposito, Long> {
     private FechaService fechaService;
 
     @Override
-    @PostMapping
-    public ResponseEntity<Map<String, String>> create(@RequestBody Deposito deposito) {
-        // Validar si el de ya existe
-        if (depositoRepository.existsByCodigo(deposito.getCodigo())) {
-            // Devolver 409 Conflict si el código ya existe
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "El código del deposito ya existe."));
-        }
-
-        // Usar FechaService para establecer fechas por defecto
-        fechaService.establecerFechasPorDefecto(deposito);
-
-        depositoRepository.save(deposito);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of("message", "Deposito creado exitosamente."));
+    protected boolean existeEntidadDuplicada(Deposito deposito) {
+        return depositoRepository.existsByCodigo(deposito.getCodigo());
     }
 
+    @Override
+    protected void preGuardarEntidad(Deposito deposito) {
+        fechaService.establecerFechasPorDefecto(deposito);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Map<String, String>> update(@PathVariable Long id, @RequestBody Deposito depositoDetails) {
+        Map<String, String> response = new HashMap<>();
+
+        return repository.findById(id).map(deposito -> {
+            // Verificar si el código pertenece a otro depósito
+            if (depositoRepository.existsByCodigoAndIdNot(depositoDetails.getCodigo(), id)) {
+                response.put("message", "El código del depósito ya existe en otro registro.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            }
+
+            // Actualizar los campos del depósito
+            deposito.setDescripcion(depositoDetails.getDescripcion());
+            deposito.setCodigo(depositoDetails.getCodigo());
+
+            repository.save(deposito);
+            response.put("message", "Depósito modificado exitosamente.");
+            return ResponseEntity.ok(response);
+        }).orElseGet(() -> {
+            response.put("message", "Depósito no encontrado.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        });
+    }
 }

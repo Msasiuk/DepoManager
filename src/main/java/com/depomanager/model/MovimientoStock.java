@@ -1,10 +1,13 @@
 package com.depomanager.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,48 +19,48 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+//Gestiona las entradas, salidas y rotaciones de productos entre depósitos.
 @NoArgsConstructor
 @Entity
 @Table(name = "movimiento_stock")
 public class MovimientoStock {
 
-    @Getter
+	@Getter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Getter @Setter
-    @Column(name = "accion", length = 50, nullable = false)
-    private String accion;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_movimiento", nullable = false)
+    private TipoMovimiento tipoMovimiento;
 
     @Getter @Setter
-    @Column(name = "codigo", length = 50, nullable = false)
-    private String codigo;
-
-    @Getter @Setter
-    @Column(name = "descripcion", length = 255, nullable = false)
-    private String descripcion;
-
-    @Getter @Setter
-    @Column(name = "fecha")
-    private Date fecha;
+    @Column(name = "fecha_movimiento", nullable = false)
+    private LocalDate fechaMovimiento;
 
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "id_deposito", nullable = false)
-    private Deposito deposito;
+    @JoinColumn(name = "deposito_origen_id")
+    private Deposito depositoOrigen;
+
+    @Getter @Setter
+    @ManyToOne
+    @JoinColumn(name = "deposito_destino_id")
+    private Deposito depositoDestino;
     
     @Getter @Setter
     @ManyToOne
-    @JoinColumn(name = "id_proveedor", nullable = false)
+    @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
     @Getter @Setter
-    @OneToMany(mappedBy = "movimientoStock")
-    private List<DetalleMovimiento> listaDetalleMovimiento;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "movimiento_stock_id")
+    private List<DetalleProducto> detalles = List.of();
 
-    @Getter @Setter
-    @Column(name = "nro_comprobante", length = 50)
-    private String nroComprobante;
+    public enum TipoMovimiento {
+        INGRESO, EGRESO, ROTACION
+    }
+
 }

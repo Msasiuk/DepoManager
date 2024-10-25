@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
        </div>
        <button onclick="deleteDeposito(${deposito.id})">Eliminar</button>
        <a href="modificar-deposito.html?id=${deposito.id}"><button>Modificar</button></a>
-	   <a href="mostrar-productos.html?id=${deposito.id}"><button>Mostrar Productos</button></a>
+	   <a href="mostrar-productos.html?id=${deposito.id}"><button>Mostrar Productos</button></a> //ELIMINAR, ESTA ES LA VISTA DEL ADMIN
      `;
      list.appendChild(item);
    });
