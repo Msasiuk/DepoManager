@@ -4,15 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestión de Depósitos</title>
+  <link rel="icon" href="css/icons/Logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+	<div id="nav-container"></div>
   <h1>Gestión de Depósitos</h1>
 
   <section id="deposito-section">
     <h2>Depósitos</h2>
-	<a href="index.html"><button>Volver</button></a>
-
+	
 	<input type="text" id="buscar-codigo" placeholder="Buscar por código...">
 	
     <form id="deposito-form">
@@ -28,5 +29,14 @@
   </section>
 
   <script src="js/depositos.js"></script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("nav-container").innerHTML = data;
+                });
+        });
+    </script>
 </body>
 </html>

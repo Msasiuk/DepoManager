@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DepoManager</title>
+  <title>Gestión Tipos Producto</title>
+  <link rel="icon" href="css/icons/Logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <div id="nav-container"></div>
   <h1>Gestión de Tipos de Producto</h1>
 
   <section id="tipo-producto-section">
@@ -25,5 +27,14 @@
   </section>
 
   <script src="js/tipos-producto.js"></script>
+  <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          fetch("nav.html")
+              .then(response => response.text())
+              .then(data => {
+                  document.getElementById("nav-container").innerHTML = data;
+              });
+      });
+  </script>
 </body>
 </html>

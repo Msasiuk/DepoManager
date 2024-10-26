@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modificar Producto</title>
+  <link rel="icon" href="css/icons/Logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+	<div id="nav-container"></div>
   <h1>Modificar Producto</h1>
   <section id="producto-section">
     <h2>Editar Producto</h2>
-	<a href="productos.html"><button>Volver</button></a>
-
+	
     <form id="modificar-producto-form">
       <input type="text" id="producto-codigo" placeholder="Código" required />
       <input type="text" id="producto-descripcion" placeholder="Descripción" required />
@@ -47,5 +48,14 @@
   </section>
 
   <script src="js/modificar-producto.js"></script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("nav-container").innerHTML = data;
+                });
+        });
+    </script>
 </body>
 </html>
