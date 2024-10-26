@@ -1,6 +1,6 @@
 package com.depomanager.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import org.springframework.stereotype.Service;
 
 import com.depomanager.model.Fechas;
@@ -9,14 +9,14 @@ import com.depomanager.model.Fechas;
 @Service
 public class FechaService {
 
-    // Retorna la fecha actual
-    public Date obtenerFechaActual() {
-        return new Date();
+	 // Retorna la fecha actual
+    public LocalDate obtenerFechaActual() {
+        return LocalDate.now();
     }
 
     // Retorna la fecha máxima (31/12/9999)
-    public Date obtenerFechaMaxima() {
-        return new Date(Long.MAX_VALUE);
+    public LocalDate obtenerFechaMaxima() {
+        return LocalDate.of(9999, 12, 31);
     }
 
     // Establece fechas por defecto si no se proporcionan

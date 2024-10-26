@@ -47,10 +47,23 @@ public class TipoProductoController extends BaseController<TipoProducto, Long> {
 	                response.put("message", "El código del tipo producto ya existe en otro registro.");
 	                return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	            }
+	            
+	            // Validar que las fechas no sean nulas
+	            if (tipoProductoDetails.getFechaInicio() == null || tipoProductoDetails.getFechaFin() == null) {
+	                response.put("message", "Las fechas no pueden ser nulas.");
+	                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	            }
+
+	            // Validar que la fecha de fin no sea anterior a la fecha de inicio
+	            if (tipoProductoDetails.getFechaFin().isBefore(tipoProductoDetails.getFechaInicio())) {
+	                response.put("message", "La fecha de finalización no puede ser anterior a la fecha de inicio.");
+	                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	            }
 
 	            // Actualizar los campos del tipo producto
 	            tipoProducto.setDescripcion(tipoProductoDetails.getDescripcion());
 	            tipoProducto.setCodigo(tipoProductoDetails.getCodigo());
+	            tipoProducto.setFechaFin(tipoProductoDetails.getFechaFin());
 
 	            repository.save(tipoProducto);
 	            response.put("message", "Tipo producto modificado exitosamente.");

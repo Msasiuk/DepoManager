@@ -46,11 +46,24 @@ public class ProveedorController extends BaseController<Proveedor, Long> {
                 response.put("message", "El CUIT/CUIL del proveedor ya existe en otro registro.");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             }
+            
+            // Validar que las fechas no sean nulas
+            if (proveedorDetails.getFechaInicio() == null || proveedorDetails.getFechaFin() == null) {
+                response.put("message", "Las fechas no pueden ser nulas.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            // Validar que la fecha de fin no sea anterior a la fecha de inicio
+            if (proveedorDetails.getFechaFin().isBefore(proveedorDetails.getFechaInicio())) {
+                response.put("message", "La fecha de finalización no puede ser anterior a la fecha de inicio.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
 
             // Actualizar los campos del proveedor
             proveedor.setCuitCuil(proveedorDetails.getCuitCuil());
             proveedor.setNombre(proveedorDetails.getNombre());
             proveedor.setRazonSocial(proveedorDetails.getRazonSocial());
+            proveedorDetails.setFechaFin(proveedorDetails.getFechaFin());
 
             repository.save(proveedor);
             response.put("message", "Proveedor modificado exitosamente.");

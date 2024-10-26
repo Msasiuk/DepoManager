@@ -1,8 +1,6 @@
 package com.depomanager.model;
 
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -16,11 +14,11 @@ public abstract class Fechas {
 
 	@Getter @Setter
     @Column(name = "fecha_inicio")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fechaInicio;
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd") Usar LocalDate de Java 8 es más adecuado para trabajar con fechas sin horas
+    private LocalDate fechaInicio;
 
     @Getter @Setter
     @Column(name = "fecha_fin")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fechaFin;
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate fechaFin;
 }
