@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Modificar Proveedor</title>
+  <link rel="icon" href="css/icons/Logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+	<div id="nav-container"></div>
   <h1>Modificar Proveedor</h1>
   
   <section id="modificar-proveedor-section">
-	<a href="proveedores.html"><button>Volver</button></a>
-    <form id="modificar-proveedor-form">
+	<form id="modificar-proveedor-form">
       <input type="text" id="proveedor-cuit-cuil" placeholder="CUIT/CUIL" required>
       <input type="text" id="proveedor-nombre" placeholder="Nombre" required>
       <input type="text" id="proveedor-razon-social" placeholder="Razón Social">
@@ -28,5 +29,14 @@
   </section>
 
   <script src="js/modificar-proveedor.js"></script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("nav-container").innerHTML = data;
+                });
+        });
+    </script>
 </body>
 </html>

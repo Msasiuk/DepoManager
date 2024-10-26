@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Consulta de Stock - DepoManager</title>
+  <title>Consulta de Stock</title>
+  <link rel="icon" href="css/icons/Logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+	<div id="nav-container"></div>
 	
   <h1>Consulta de Stock en Depósitos</h1>
 
   <section id="stock-section">
-    <a href="index.html"><button>Volver</button></a>
     <h2>Stock por Depósito</h2>
 
     <!-- Selector de depósito -->
@@ -27,5 +28,14 @@
   </section>
 
   <script src="js/stock.js"></script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("nav-container").innerHTML = data;
+                });
+        });
+    </script>
 </body>
 </html>

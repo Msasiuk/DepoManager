@@ -1,4 +1,4 @@
-body {
+/*body {
   font-family: Arial, sans-serif;
   margin: 20px;
   background-color: #82C6D8;
@@ -51,6 +51,123 @@ form button:hover {
   margin-top: 20px;
 }
 
+.list-item {
+  background-color: #f1f1f1;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.list-item button:hover {
+  background-color: #c82333;
+}*/
+
+/* Reset básico para eliminar márgenes y padding predeterminados */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo del nav (header) */
+nav {
+  height: 100px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que esté siempre encima del contenido */
+}
+
+/* Estilo para los enlaces del nav */
+nav a {
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Estilo para las imágenes en el nav */
+nav img {
+  width: 60px;
+  height: 60px;
+}
+
+/* Espaciado adicional entre el nav y el contenido */
+body {
+  padding-top: 100px; /* Ajusta según la altura del nav */
+  background-color: #82C6D8;
+}
+
+/* Estilo para el encabezado principal */
+h1 {
+  text-align: center;
+  color: white;
+  margin-top: 20px;
+}
+
+/* Contenedor de sección */
+section {
+  margin: 20px auto;
+  max-width: 80%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo del formulario */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input, form button {
+  flex: 1 1 calc(33.333% - 10px);
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Botón del formulario */
+form button {
+  background-color: #82C6D8;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #82a9d8;
+}
+
+/* Estilo de los elementos de lista */
 .list-item {
   background-color: #f1f1f1;
   padding: 15px;

@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Movimientos de Stock - DepoManager</title>
+  <title>Gestión de Movimientos de Stock</title>
+  <link rel="icon" href="css/icons/Logo.ico" type="image/x-icon">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+	<div id="nav-container"></div>
   <h1>Gestión de Movimientos de Stock</h1>
 
   <section id="movimiento-section">
-    <a href="index.html"><button>Volver</button></a>
     <h2>Movimientos de Stock</h2>
 
     <!-- Formulario para registrar un movimiento de stock -->
@@ -34,8 +35,10 @@
 	    <option value="" disabled selected>Depósito Destino</option>
 	  </select>
 
+	  
 	  <input type="text" id="nro-comprobante" placeholder="Número de Comprobante">
 
+	  <br>
 	  <div id="detalle-producto-list"></div>
 
 	  <button type="button" id="agregar-producto-btn">Agregar Producto</button>
@@ -46,5 +49,14 @@
   </section>
 
   <script src="js/movimiento-stock.js"></script>
+  <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("nav.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("nav-container").innerHTML = data;
+                });
+        });
+    </script>
 </body>
 </html>
