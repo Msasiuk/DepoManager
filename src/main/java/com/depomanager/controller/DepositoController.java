@@ -47,10 +47,23 @@ public class DepositoController extends BaseController<Deposito, Long> {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             }
 
+            // Validar que las fechas no sean nulas
+            if (depositoDetails.getFechaInicio() == null || depositoDetails.getFechaFin() == null) {
+                response.put("message", "Las fechas no pueden ser nulas.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            // Validar que la fecha de fin no sea anterior a la fecha de inicio
+            if (depositoDetails.getFechaFin().isBefore(depositoDetails.getFechaInicio())) {
+                response.put("message", "La fecha de finalización no puede ser anterior a la fecha de inicio.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
             // Actualizar los campos del depósito
             deposito.setDescripcion(depositoDetails.getDescripcion());
             deposito.setCodigo(depositoDetails.getCodigo());
-
+            deposito.setFechaFin(depositoDetails.getFechaFin());
+            
             repository.save(deposito);
             response.put("message", "Depósito modificado exitosamente.");
             return ResponseEntity.ok(response);

@@ -46,6 +46,18 @@ public class ProductoController extends BaseController<Producto, Long> {
                 response.put("message", "El código del producto ya existe en otro registro.");
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
             }
+            
+            // Validar que las fechas no sean nulas
+            if (productoDetails.getFechaInicio() == null || productoDetails.getFechaFin() == null) {
+                response.put("message", "Las fechas no pueden ser nulas.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
+            // Validar que la fecha de fin no sea anterior a la fecha de inicio
+            if (productoDetails.getFechaFin().isBefore(productoDetails.getFechaInicio())) {
+                response.put("message", "La fecha de finalización no puede ser anterior a la fecha de inicio.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
 
             // Actualizar los campos del producto
             producto.setCodigo(productoDetails.getCodigo());
@@ -55,6 +67,7 @@ public class ProductoController extends BaseController<Producto, Long> {
             producto.setStockMaximo(productoDetails.getStockMaximo());
             producto.setStockMinimo(productoDetails.getStockMinimo());
             producto.setPuntoReposicion(productoDetails.getPuntoReposicion());
+            producto.setFechaFin(productoDetails.getFechaFin());
 
             repository.save(producto);
             response.put("message", "Producto modificado exitosamente.");
