@@ -1,14 +1,13 @@
 package com.depomanager.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.depomanager.model.ModelLogin.Roles;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Entity
@@ -29,4 +28,26 @@ public class Usuario extends Fechas{
     @Column(name = "contrasenia", length = 255, nullable = false)
     private String contrasenia;
 
-}
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false)
+    private Set<Roles> roles;
+
+
+    public Set<Roles> getRoles() {
+        if (roles == null || roles.isEmpty()) {
+            roles = new HashSet<>();
+            roles.add(Roles.USER);
+        }
+        return roles;
+    }
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
+    }
+
+
+
+    }
+
+
+
+
