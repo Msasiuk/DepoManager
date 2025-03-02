@@ -44,15 +44,18 @@ Navegación Principal:
    │   │   ├── controller      # Controladores (MVC)
    │   │   ├── model           # Clases modelo (JPA Entities)
    │   │   ├── repository      # Interfaces Repository
+   │   │   ├── Security        # Manejo de Seguridad
+   │   │   ├── JWT             # Manejo de autenticaciones
    │   └── resources/static    # Archivos HTML, CSS y JS
 
 ---
 
-## **Tecnologías Utilizadas**
+## **Requerimientos**
 
 **Backend:**
 
 - Java 11 con Spring Boot para la lógica del negocio.
+- Manejo de seguridad con JWT y Spring Security
 - JPA (Java Persistence API) para la interacción con la base de datos.
 - MySQL para el almacenamiento de datos.
 
