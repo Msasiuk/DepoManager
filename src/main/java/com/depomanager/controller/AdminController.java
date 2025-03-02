@@ -20,7 +20,7 @@ public class AdminController {
 
     private final UsuarioService usuarioService;
 
-    // Inyección a través del constructor
+ 
     public AdminController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }

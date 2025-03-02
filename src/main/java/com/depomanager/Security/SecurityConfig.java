@@ -27,14 +27,14 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Configuración de seguridad HTTP
+        //Aca manejo el http
         http
-            .csrf(csrf -> csrf.disable())  // Deshabilitar CSRF si no usas cookies
+            .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/**","/inicio/**").permitAll()  // Permitir acceso sin autenticación
-                .requestMatchers("/api/user/**").hasRole("USER")  // Solo usuarios con rol USER
+                .requestMatchers("/api/**").permitAll()  //Endpoints sin auth
+                .requestMatchers("/api/user/**","/inicio/**").hasRole("USER")  // Solo usuarios con rol USER
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Solo usuarios con rol ADMIN
-                .anyRequest().authenticated()  // Cualquier otra petición requiere autenticación
+                .anyRequest().authenticated()  //Todo el resto necesita auth
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
 

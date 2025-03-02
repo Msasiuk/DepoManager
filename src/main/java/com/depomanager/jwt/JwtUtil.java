@@ -1,6 +1,7 @@
 package com.depomanager.jwt;
 
 
+
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import com.depomanager.model.Usuario;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -37,7 +39,7 @@ public class JwtUtil {
         // Verificar que el claim "roles" sea una lista
         Object rolesObject = claims.get("roles");
         if (rolesObject instanceof List<?>) {
-            return (List<String>) rolesObject; // Cast seguro a List<String>
+            return (List<String>) rolesObject; 
         } else {
             throw new IllegalArgumentException("El claim 'roles' no es una lista válida");
         }
@@ -51,14 +53,15 @@ public class JwtUtil {
                 .getBody();
     }
     
-    public static boolean ObtenerNameToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false; // Si ocurre un error, el token no es válido
+    
+    public String limpiarToken(String token) {
+    	if (token.startsWith("Bearer")) {
+            token = token.substring(7);
         }
+        return null;
     }
+    
+   
     
     public boolean estadoToken(String token) {
     		Claims claims= Jwts.parser()

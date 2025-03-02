@@ -20,15 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String alias) throws UsernameNotFoundException {
-        // Buscar al usuario en la base de datos por nombre (username)
+        
         Usuario user = usuarioRepository.findByAlias(alias)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el nombre: " + alias));
 
-        // Convertir el usuario a un objeto UserDetails de Spring Security
+        // Convertir el usuario en un objeto de userDetails de spring security
         return User.builder()
                 .username(user.getAlias())
-                .password(user.getContrasenia())  // Asegúrate de que la contraseña esté cifrada
-                .roles(user.getRoles().stream().map(Enum::name).toArray(String[]::new))  // Convertir roles a String[]
+                .password(user.getContrasenia())  
+                .roles(user.getRoles().stream().map(Enum::name).toArray(String[]::new))//Manejo de roles a String
                 .build();
     }
 }

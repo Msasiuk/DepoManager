@@ -45,11 +45,11 @@ public ResponseEntity<String> register(@RequestBody LoginDTO loginDTO) {
    
     String hashedPassword = passwordService.encriptar(loginDTO.getPassword());
 
-    // Guardar el usuario en la base de datos
+    //Register guarda en bd
     Usuario newUser = new Usuario();
     newUser.setAlias(loginDTO.getAlias());
     newUser.setContrasenia(hashedPassword);
-    newUser.setRoles(new HashSet<>(Collections.singletonList(Roles.ADMIN)));
+    newUser.setRoles(new HashSet<>(Collections.singletonList(Roles.USER)));
     userRepository.save(newUser);
 
     return ResponseEntity.ok("Usuario registrado exitosamente");
@@ -63,12 +63,12 @@ public ResponseEntity<String> register(@RequestBody LoginDTO loginDTO) {
         var userOptional = userRepository.findByAlias(loginDTO.getAlias());
 
         if (userOptional.isEmpty() || !passwordService.verificar(loginDTO.getPassword(), userOptional.get().getContrasenia())) {
-            System.out.println("Credenciales incorrectas");//BORRAR JOACO
+            System.out.println("Credenciales incorrectas");//BORRAR JOACO(PRUEBAS)
             return ResponseEntity.status(401).body("Credenciales incorrectas");
         }
 
         String token = JwtUtil.generarToken(userOptional.get());
-        System.out.println("Token generado: " + token);//BORRAR JOACO
+        System.out.println("Token generado: " + token);//BORRAR JOACO(PRUEBAS)
         return ResponseEntity.ok(token);
     }
 
