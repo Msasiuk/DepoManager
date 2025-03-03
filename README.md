@@ -1,6 +1,6 @@
 # DepoManager
 
-**DepoManager** es una aplicación web diseñada para gestionar inventarios en depósitos, permitiendo administrar productos, proveedores, movimientos de stock, y más. Su arquitectura sigue el patrón **Modelo-Vista-Controlador (MVC)**, asegurando la separación clara de responsabilidades.
+**DepoManager** es una aplicación web diseñada para gestionar inventarios en depósitos, permitiendo administrar productos, proveedores, movimientos de stock, y más. Su arquitectura sigue un patron hibrido entre tipo **Modulos** y **Modelo-Vista-Controlador (MVC)**, asegurando la separación clara de responsabilidades.
 
 ---
 
