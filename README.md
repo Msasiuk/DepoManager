@@ -64,6 +64,10 @@ Navegación Principal:
 - HTML/CSS con Bootstrap para la interfaz.
 - JavaScript para interactividad.
 
+**Documentacion:**
+
+-Manejo de documentacion sobre la API con Swagger
+
 **Integración:**
 
 - Spring MVC para conectar el backend con el frontend.
