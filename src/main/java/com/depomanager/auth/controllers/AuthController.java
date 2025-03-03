@@ -20,11 +20,15 @@ import com.depomanager.usuario.Roles;
 import com.depomanager.usuario.models.Usuario;
 import com.depomanager.usuario.repository.UsuarioRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 
 
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/auth")
+@Tag(name="Autenticacion",description = "Operaciones sobre autenticacion de usuario")
 public class AuthController {
 
 
@@ -34,7 +38,10 @@ private UsuarioRepository userRepository;
 @Autowired
 private PasswordService passwordService;
 
+
+
 @PostMapping("/register")
+@Operation(summary ="Registro de usuario",description ="Registro de usuario en base de datos")
 public ResponseEntity<String> register(@RequestBody LoginDTO loginDTO) {
 	System.out.println("Datos recibidos: " + loginDTO.getAlias() + ", " + loginDTO.getPassword());//BORRAR JOACO
   
@@ -57,6 +64,7 @@ public ResponseEntity<String> register(@RequestBody LoginDTO loginDTO) {
    
 
     @PostMapping("/login")
+    @Operation(summary ="Logeo de usuario",description ="Autenticacion(logger) de usuario en base de datos")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
         System.out.println("Intentando autenticar usuario: " + loginDTO.getAlias());
 

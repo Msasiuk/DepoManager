@@ -31,7 +31,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable()) 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/**").permitAll()  //Endpoints sin auth
+                .requestMatchers("/api/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()  //Endpoints sin auth
                 .requestMatchers("/api/user/**","/inicio/**").hasRole("USER")  // Solo usuarios con rol USER
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")  // Solo usuarios con rol ADMIN
                 .anyRequest().authenticated()  //Todo el resto necesita auth
