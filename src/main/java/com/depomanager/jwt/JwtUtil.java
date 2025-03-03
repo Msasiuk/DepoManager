@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.depomanager.model.Usuario;
+import com.depomanager.usuario.models.Usuario;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

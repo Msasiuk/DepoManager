@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.depomanager.service.ManejoLogin.CustomUserDetailsService;
+import com.depomanager.auth.services.CustomUserDetailsService;
 
 import java.io.IOException;
 import java.util.List;
