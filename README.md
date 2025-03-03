@@ -32,23 +32,21 @@ Navegación Principal:
 
 ---
 
-## **Estructura del Proyecto**
-
-1. Controladores: gestionan las peticiones HTTP.
-2. Modelos: Representan las entidades del sistema
-3. 
-   ```bash
-   src
-   ├── main
-   │   ├── java/com/depomanager
-   │   │   ├── controller      # Controladores (MVC)
-   │   │   ├── model           # Clases modelo (JPA Entities)
-   │   │   ├── repository      # Interfaces Repository
-   │   │   ├── Security        # Manejo de Seguridad
-   │   │   ├── JWT             # Manejo de autenticaciones
-   │   └── resources/static    # Archivos HTML, CSS y JS
-
----
+src
+├── main
+│   ├── java/com/depomanager
+│   │   ├── auth              # Módulo de autenticación
+│   │   ├── deposito          # Módulo de gestión de depósitos
+│   │   ├── movimiento        # Módulo de gestión de movimientos
+│   │   ├── producto          # Módulo de gestión de productos
+│   │   ├── proveedor         # Módulo de gestión de proveedores
+│   │   ├── stock             # Módulo de gestión de stock
+│   │   ├── usuario           # Módulo de gestión de usuarios
+│   │   ├── security          # Configuración de seguridad
+│   │   ├── jwt               # Manejo de autenticación con JWT
+│   │   ├── excepciones       # Manejo global de excepciones
+│   │   ├── utilidades        # Clases auxiliares y utilitarias
+│   └── resources/static      # Archivos estáticos como CSS y JS
 
 ## **Requerimientos**
 
